@@ -20,16 +20,19 @@ const styles = StyleSheet.create({
     backgroundColor: accent,
     padding: 28,
     marginBottom: 20,
+    alignItems: "center",
   },
   headerName: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 4,
+    textAlign: "center",
   },
   headerRole: {
     fontSize: 11,
     color: "#c7d2fe",
+    textAlign: "center",
   },
   headerContact: {
     flexDirection: "row",
@@ -38,6 +41,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 8,
     color: "#a5b4fc",
+    justifyContent: "center",
   },
   content: {
     paddingHorizontal: 28,

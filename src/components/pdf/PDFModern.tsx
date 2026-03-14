@@ -30,11 +30,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: teal,
     marginBottom: 4,
+    textAlign: "center",
   },
   headline: {
     fontSize: 9,
     color: "#555",
     marginBottom: 16,
+    textAlign: "center",
   },
   sideSection: {
     marginBottom: 14,

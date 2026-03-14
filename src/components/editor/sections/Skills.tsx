@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { UpdatePreviewButton } from "../UpdatePreviewButton";
+import { AIAssistButton } from "../AIAssistButton";
+import { aiApi } from "@/lib/ai";
 import { useState } from "react";
 
 export function Skills() {
@@ -69,6 +71,41 @@ export function Skills() {
             placeholder="e.g. JavaScript"
           />
         </div>
+        <AIAssistButton
+          label="Suggest skills"
+          pickMultiple
+          onGenerate={async () => {
+            const role =
+              data.contact?.headline ||
+              data.experiences[0]?.role ||
+              "professional";
+            const existingSkills = groups[0]?.skills ?? [];
+            const res = await aiApi.suggestSkills(role, existingSkills);
+            return (res as { result: string[] }).result;
+          }}
+          onAccept={(result) => {
+            const list = Array.isArray(result) ? result : [result];
+            const nextGroups = [...groups];
+            const first = nextGroups[0];
+            const toAdd = list.filter(
+              (s) => s.trim() && !first?.skills.includes(s.trim())
+            );
+            if (toAdd.length === 0) return;
+            if (first) {
+              nextGroups[0] = {
+                ...first,
+                skills: [...first.skills, ...toAdd],
+              };
+            } else {
+              nextGroups.push({
+                id: createId(),
+                label: "Skills",
+                skills: toAdd,
+              });
+            }
+            updateData({ skills: nextGroups });
+          }}
+        />
         <div className="flex flex-wrap gap-2">
           {(groups[0]?.skills ?? []).map((skill, i) => (
             <span

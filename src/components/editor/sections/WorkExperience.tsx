@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { UpdatePreviewButton } from "../UpdatePreviewButton";
+import { AIAssistButton } from "../AIAssistButton";
+import { aiApi } from "@/lib/ai";
 import type { ResumeExperienceItem } from "@types/resume";
 
 export function WorkExperience() {
@@ -174,11 +176,25 @@ export function WorkExperience() {
                 </Button>
               </div>
               {entry.highlights.map((bullet, i) => (
-                <div key={i} className="flex gap-2">
+                <div key={i} className="flex gap-2 items-start">
                   <Input
                     value={bullet}
                     onChange={(e) => updateHighlight(entry.id, i, e.target.value)}
                     placeholder="Achievement or responsibility"
+                    className="flex-1"
+                  />
+                  <AIAssistButton
+                    label="AI Improve"
+                    size="icon"
+                    variant="ghost"
+                    onGenerate={async () => {
+                      const res = await aiApi.improveBullet(bullet, entry.role);
+                      return (res as { result: string }).result;
+                    }}
+                    onAccept={(result) => {
+                      const text = typeof result === "string" ? result : result[0] ?? "";
+                      updateHighlight(entry.id, i, text);
+                    }}
                   />
                   <Button
                     type="button"

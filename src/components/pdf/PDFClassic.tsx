@@ -18,11 +18,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#000",
     paddingBottom: 8,
+    alignItems: "center",
   },
   name: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 4,
+    textAlign: "center",
   },
   contactRow: {
     flexDirection: "row",
@@ -30,6 +32,7 @@ const styles = StyleSheet.create({
     gap: 8,
     fontSize: 9,
     color: "#333",
+    justifyContent: "center",
   },
   section: {
     marginTop: 14,
