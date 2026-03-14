@@ -1,8 +1,8 @@
 "use client";
 
 import { create } from "zustand";
-import type { ResumeData } from "@types/resume";
-import { defaultResumeData } from "@types/resume";
+import type { ResumeData } from "@appTypes/resume";
+import { defaultResumeData } from "@appTypes/resume";
 import { updateResume } from "@/lib/api";
 
 function cloneData(data: ResumeData): ResumeData {

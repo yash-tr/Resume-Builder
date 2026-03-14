@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 
 type Result = string | string[];
 
@@ -11,7 +12,13 @@ interface AIAssistButtonProps {
   onAccept: (result: Result) => void;
   label?: string;
   size?: "default" | "sm" | "lg" | "icon";
-  variant?: "default" | "secondary" | "outline" | "ghost" | "link" | "destructive";
+  variant?:
+    | "default"
+    | "secondary"
+    | "outline"
+    | "ghost"
+    | "link"
+    | "destructive";
   /** When true and result is string[], show checkboxes and pass only selected to onAccept */
   pickMultiple?: boolean;
 }
@@ -43,6 +50,7 @@ export function AIAssistButton({
       setState("suggestion");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
+      toast.error("AI is unavailable, please try again");
       setState("idle");
     }
   };
@@ -91,12 +99,14 @@ export function AIAssistButton({
         ) : (
           <Sparkles className="h-4 w-4" />
         )}
-        {label && <span className={size === "icon" ? "sr-only" : "ml-1.5"}>{label}</span>}
+        {label && (
+          <span className={size === "icon" ? "sr-only" : "ml-1.5"}>
+            {label}
+          </span>
+        )}
       </Button>
 
-      {error && (
-        <p className="text-sm text-destructive">{error}</p>
-      )}
+      {error && <p className="text-sm text-destructive">{error}</p>}
 
       {state === "suggestion" && suggestion != null && (
         <div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-3 space-y-2">
@@ -135,7 +145,12 @@ export function AIAssistButton({
             <Button type="button" size="sm" onClick={handleAccept}>
               {pickMultiple && list ? "Add selected" : "Use this"}
             </Button>
-            <Button type="button" size="sm" variant="outline" onClick={handleDiscard}>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={handleDiscard}
+            >
               Discard
             </Button>
           </div>
@@ -144,3 +159,4 @@ export function AIAssistButton({
     </div>
   );
 }
+

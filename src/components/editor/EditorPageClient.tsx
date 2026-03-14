@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 import { useResumeStore } from "@/lib/resume-store";
 import { EditorLayout } from "./EditorLayout";
-import type { ResumeData } from "@types/resume";
+import { UnsavedChangesGuard } from "./UnsavedChangesGuard";
+import type { ResumeData } from "@appTypes/resume";
 
 export interface EditorInitialData {
   id: string;
@@ -28,5 +29,10 @@ export function EditorPageClient({ initialData }: EditorPageClientProps) {
     });
   }, [initialData.id, setResume]);
 
-  return <EditorLayout />;
+  return (
+    <>
+      <UnsavedChangesGuard />
+      <EditorLayout />
+    </>
+  );
 }

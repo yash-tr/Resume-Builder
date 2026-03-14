@@ -55,7 +55,7 @@ export const resumeDataSchema = z.object({
   education: z.array(resumeEducationItemSchema).default([]),
   projects: z.array(resumeProjectItemSchema).default([]),
   skills: z.array(resumeSkillGroupSchema).default([]),
-  extras: z.record(z.unknown()).optional().default({}),
+  extras: z.record(z.string(), z.unknown()).optional().default({}),
 });
 
 export type ResumeDataInput = z.input<typeof resumeDataSchema>;

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { UpdatePreviewButton } from "../UpdatePreviewButton";
-import type { ResumeEducationItem } from "@types/resume";
+import type { ResumeEducationItem } from "@appTypes/resume";
 
 export function Education() {
   const { data, updateData } = useResumeStore();

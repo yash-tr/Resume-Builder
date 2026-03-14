@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 import { useResumeStore } from "@/lib/resume-store";
 import { PDFClassic } from "./PDFClassic";
@@ -20,10 +20,27 @@ function PDFPreviewPanelInner() {
   const Doc =
     templates[templateId as keyof typeof templates] ?? templates.classic;
 
+  const [isUpdating, setIsUpdating] = useState(true);
+
+  useEffect(() => {
+    setIsUpdating(true);
+    const id = setTimeout(() => setIsUpdating(false), 500);
+    return () => clearTimeout(id);
+  }, [previewData, templateId]);
+
   return (
-    <PDFViewer width="100%" height="100%" style={{ minHeight: 500 }}>
-      <Doc data={previewData} />
-    </PDFViewer>
+    <div className="relative h-full">
+      <PDFViewer width="100%" height="100%" style={{ minHeight: 500 }}>
+        <Doc data={previewData} />
+      </PDFViewer>
+      {isUpdating && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background/60">
+          <div className="rounded-md bg-card px-3 py-1 text-xs text-muted-foreground shadow">
+            Generating preview…
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

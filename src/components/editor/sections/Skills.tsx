@@ -123,6 +123,11 @@ export function Skills() {
               </button>
             </span>
           ))}
+          {(groups[0]?.skills ?? []).length === 0 && (
+            <p className="text-xs text-muted-foreground">
+              Add your skills to highlight your strengths.
+            </p>
+          )}
         </div>
       </CardContent>
     </Card>

@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@lib/db";
 import { resumes } from "@lib/db/schema";
 import { EditorPageClient } from "@/components/editor/EditorPageClient";
-import { defaultResumeData, type ResumeData } from "@types/resume";
+import { defaultResumeData, type ResumeData } from "@appTypes/resume";
 
 export default async function EditorPage({
   params,
@@ -24,7 +24,7 @@ export default async function EditorPage({
     .limit(1);
 
   if (!resume || resume.userId !== userId) {
-    redirect("/dashboard");
+    redirect("/dashboard?resumeNotFound=1");
   }
 
   const rawData = (resume.data ?? {}) as Partial<ResumeData>;

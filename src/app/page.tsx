@@ -17,6 +17,9 @@ export default async function Home() {
         <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
           Sign in to start creating and exporting tailored resumes.
         </p>
+        <p className="mt-8 text-xs text-zinc-400 dark:text-zinc-600">
+          Built by Yash Tripathi &middot; tripathiyash1004@gmail.com
+        </p>
       </main>
     </div>
   );

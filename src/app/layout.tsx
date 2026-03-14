@@ -8,6 +8,7 @@ import {
 } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +49,17 @@ export default function RootLayout({
             </nav>
           </header>
           {children}
+          <footer className="border-t border-zinc-200 px-4 py-3 text-center text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-500">
+            Built by{" "}
+            <a
+              href="mailto:tripathiyash1004@gmail.com"
+              className="font-medium text-zinc-700 underline underline-offset-2 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
+            >
+              Yash Tripathi
+            </a>{" "}
+            &middot; tripathiyash1004@gmail.com
+          </footer>
+          <Toaster />
         </ClerkProvider>
       </body>
     </html>

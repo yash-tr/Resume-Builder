@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { ArrowLeft as ArrowLeftIcon } from "lucide-react";
 import { PersonalInfo } from "./sections/PersonalInfo";
 import { Summary } from "./sections/Summary";
 import { WorkExperience } from "./sections/WorkExperience";
@@ -41,9 +43,18 @@ const PDFPreviewPanel = dynamic(
 );
 
 export function EditorLayout() {
-  const { id, title, updateTitle, saving, dirty, saveResume, data, templateId } =
-    useResumeStore();
+  const id = useResumeStore((s) => s.id);
+  const title = useResumeStore((s) => s.title);
+  const updateTitle = useResumeStore((s) => s.updateTitle);
+  const saving = useResumeStore((s) => s.saving);
+  const dirty = useResumeStore((s) => s.dirty);
+  const saveResume = useResumeStore((s) => s.saveResume);
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
+
+  const saveRef = useRef(saveResume);
+  useEffect(() => {
+    saveRef.current = saveResume;
+  }, [saveResume]);
 
   const statusLabel = saving
     ? "Saving…"
@@ -56,12 +67,35 @@ export function EditorLayout() {
       ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
       : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
 
+  const titleSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scheduleTitleSave = () => {
+    if (titleSaveTimer.current) {
+      clearTimeout(titleSaveTimer.current);
+    }
+    titleSaveTimer.current = setTimeout(() => {
+      void saveRef.current();
+    }, 600);
+  };
+
   return (
     <div className="flex h-screen flex-col">
       <header className="flex shrink-0 items-center gap-3 border-b px-4 py-3">
+        <Button variant="ghost" size="icon" className="shrink-0" asChild>
+          <Link href="/dashboard" aria-label="Back to resumes">
+            <ArrowLeftIcon className="h-4 w-4" />
+          </Link>
+        </Button>
         <Input
           value={title}
           onChange={(e) => updateTitle(e.target.value)}
+          onBlur={scheduleTitleSave}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              e.currentTarget.blur();
+              scheduleTitleSave();
+            }
+          }}
           className="max-w-xs border-0 text-lg font-semibold shadow-none focus-visible:ring-0"
           placeholder="Resume title"
         />
@@ -74,7 +108,13 @@ export function EditorLayout() {
           type="button"
           variant="default"
           size="sm"
-          onClick={saveResume}
+          onClick={async () => {
+            try {
+              await saveResume();
+            } catch {
+              toast.error("Failed to save. Please try again.");
+            }
+          }}
           disabled={saving || !dirty}
         >
           Save
@@ -85,7 +125,7 @@ export function EditorLayout() {
           </Button>
         ) : null}
         <span className="ml-auto">
-          <PDFDownloadButton data={data} templateId={templateId} />
+          <DownloadButtonWrapper />
         </span>
       </header>
 
@@ -120,6 +160,12 @@ export function EditorLayout() {
       </div>
     </div>
   );
+}
+
+function DownloadButtonWrapper() {
+  const data = useResumeStore((s) => s.data);
+  const templateId = useResumeStore((s) => s.templateId);
+  return <PDFDownloadButton data={data} templateId={templateId} />;
 }
 
 function ResumeForm() {

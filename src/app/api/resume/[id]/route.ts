@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@lib/db";
 import { resumes } from "@lib/db/schema";
-import type { ResumeData } from "@types/resume";
+import type { ResumeData } from "@appTypes/resume";
 
 // GET — get a single resume by ID (verify ownership)
 export async function GET(

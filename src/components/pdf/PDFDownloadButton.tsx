@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PDFClassic } from "./PDFClassic";
 import { PDFModern } from "./PDFModern";
 import { PDFPremium } from "./PDFPremium";
-import type { ResumeData } from "@types/resume";
+import type { ResumeData } from "@appTypes/resume";
 
 interface PDFDownloadButtonProps {
   data: ResumeData;

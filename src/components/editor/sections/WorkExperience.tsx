@@ -9,7 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { UpdatePreviewButton } from "../UpdatePreviewButton";
 import { AIAssistButton } from "../AIAssistButton";
 import { aiApi } from "@/lib/ai";
-import type { ResumeExperienceItem } from "@types/resume";
+import type { ResumeExperienceItem } from "@appTypes/resume";
 
 export function WorkExperience() {
   const { data, updateData } = useResumeStore();
@@ -175,6 +175,11 @@ export function WorkExperience() {
                   Add bullet
                 </Button>
               </div>
+              {entry.highlights.length === 0 && (
+                <p className="text-xs text-muted-foreground">
+                  Click + to add an achievement.
+                </p>
+              )}
               {entry.highlights.map((bullet, i) => (
                 <div key={i} className="flex gap-2 items-start">
                   <Input

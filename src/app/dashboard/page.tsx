@@ -5,12 +5,17 @@ import { db } from "@lib/db";
 import { resumes } from "@lib/db/schema";
 import { ResumeCard } from "@/components/dashboard/resume-card";
 import { NewResumeButton } from "@/components/dashboard/new-resume-button";
+import { DashboardToasts } from "@/components/dashboard/DashboardToasts";
 import { ensureProfile } from "@/lib/profile";
 import type { Resume } from "@/lib/api";
-import type { ResumeData } from "../../../types/resume";
+import type { ResumeData } from "@appTypes/resume";
 import type { InferSelectModel } from "drizzle-orm";
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ resumeNotFound?: string }>;
+}) {
   const { userId } = await auth();
 
   if (!userId) {
@@ -24,6 +29,8 @@ export default async function DashboardPage() {
     console.error("Failed to ensure profile:", error);
     // Continue anyway - profile creation might fail if tables don't exist
   }
+
+  const { resumeNotFound } = await searchParams;
 
   let userResumes: InferSelectModel<typeof resumes>[] = [];
   try {
@@ -41,6 +48,7 @@ export default async function DashboardPage() {
 
   return (
     <main className="container mx-auto px-4 py-8">
+      <DashboardToasts resumeNotFound={Boolean(resumeNotFound)} />
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-semibold tracking-tight">My Resumes</h1>
         <NewResumeButton />
@@ -49,10 +57,11 @@ export default async function DashboardPage() {
       {userResumes.length === 0 ? (
         <div className="flex min-h-[400px] flex-col items-center justify-center rounded-lg border border-dashed">
           <div className="flex flex-col items-center gap-4 text-center">
-            <h2 className="text-xl font-semibold">No resumes yet</h2>
+            <h2 className="text-xl font-semibold">Create your first resume</h2>
             <p className="text-muted-foreground max-w-md">
-              Get started by creating your first resume. Click the button above to begin.
+              Start from a professional template and export a polished PDF in minutes.
             </p>
+            <NewResumeButton />
           </div>
         </div>
       ) : (

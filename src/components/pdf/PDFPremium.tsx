@@ -5,7 +5,7 @@ import {
   View,
   StyleSheet,
 } from "@react-pdf/renderer";
-import type { ResumeData } from "@types/resume";
+import type { ResumeData } from "@appTypes/resume";
 
 const accent = "#4f46e5";
 const accentLight = "#e0e7ff";

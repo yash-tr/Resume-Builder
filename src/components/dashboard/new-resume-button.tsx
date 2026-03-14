@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createResume } from "@/lib/api";
+import { toast } from "sonner";
 
 export function NewResumeButton() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export function NewResumeButton() {
       router.push(`/editor/${id}`);
     } catch (error) {
       console.error("Failed to create resume:", error);
-      alert("Failed to create resume. Please try again.");
+      toast.error("Failed to create resume. Please try again.");
       setIsCreating(false);
     }
   };

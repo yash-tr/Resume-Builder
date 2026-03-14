@@ -1,4 +1,4 @@
-import type { ResumeData } from "@types/resume";
+import type { ResumeData } from "@appTypes/resume";
 
 async function post(body: object) {
   const r = await fetch("/api/ai/generate", {

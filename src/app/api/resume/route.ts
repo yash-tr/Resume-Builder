@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import { db } from "@lib/db";
 import { resumes } from "@lib/db/schema";
 import { ensureProfile } from "@/lib/profile";
-import { defaultResumeData } from "@types/resume";
+import { defaultResumeData } from "@appTypes/resume";
 
 // GET — list user's resumes
 export async function GET() {
