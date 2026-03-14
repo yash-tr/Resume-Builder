@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { UpdatePreviewButton } from "../UpdatePreviewButton";
 import type { ResumeEducationItem } from "@types/resume";
 
 export function Education() {
@@ -44,9 +45,12 @@ export function Education() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Education</CardTitle>
-        <Button type="button" variant="outline" size="sm" onClick={addEntry}>
-          Add entry
-        </Button>
+        <div className="flex items-center gap-2">
+          <UpdatePreviewButton />
+          <Button type="button" variant="outline" size="sm" onClick={addEntry}>
+            Add entry
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         {education.map((entry) => (

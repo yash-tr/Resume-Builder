@@ -58,3 +58,15 @@ export async function ensureProfile(userId: string): Promise<string> {
 
   return userId;
 }
+
+/**
+ * Get the current user's profile (including plan). Returns null if not found.
+ */
+export async function getProfile(userId: string) {
+  const [profile] = await db
+    .select()
+    .from(profiles)
+    .where(eq(profiles.id, userId))
+    .limit(1);
+  return profile ?? null;
+}

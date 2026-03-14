@@ -4,14 +4,16 @@ import { useResumeStore } from "@/lib/resume-store";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { UpdatePreviewButton } from "../UpdatePreviewButton";
 
 export function Summary() {
   const { data, updateData } = useResumeStore();
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <CardTitle>Summary</CardTitle>
+        <UpdatePreviewButton />
       </CardHeader>
       <CardContent>
         <div className="grid gap-2">

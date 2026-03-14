@@ -4,6 +4,7 @@ import { useResumeStore } from "@/lib/resume-store";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { UpdatePreviewButton } from "../UpdatePreviewButton";
 
 export function PersonalInfo() {
   const { data, updateData } = useResumeStore();
@@ -17,8 +18,9 @@ export function PersonalInfo() {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <CardTitle>Personal info</CardTitle>
+        <UpdatePreviewButton />
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-2">

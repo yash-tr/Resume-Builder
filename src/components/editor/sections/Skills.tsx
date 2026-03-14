@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { UpdatePreviewButton } from "../UpdatePreviewButton";
 import { useState } from "react";
 
 export function Skills() {
@@ -53,8 +54,9 @@ export function Skills() {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <CardTitle>Skills</CardTitle>
+        <UpdatePreviewButton />
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-2">

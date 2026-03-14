@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useResumeStore } from "@/lib/resume-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,8 +41,20 @@ const PDFPreviewPanel = dynamic(
 );
 
 export function EditorLayout() {
-  const { title, updateTitle, saving, data, templateId } = useResumeStore();
+  const { id, title, updateTitle, saving, dirty, saveResume, data, templateId } =
+    useResumeStore();
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
+
+  const statusLabel = saving
+    ? "Saving…"
+    : dirty
+      ? "Unsaved changes"
+      : "Saved";
+  const statusVariant = saving
+    ? "bg-muted text-muted-foreground"
+    : dirty
+      ? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+      : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
 
   return (
     <div className="flex h-screen flex-col">
@@ -53,15 +66,24 @@ export function EditorLayout() {
           placeholder="Resume title"
         />
         <span
-          className={cn(
-            "rounded-full px-2.5 py-0.5 text-xs font-medium",
-            saving
-              ? "bg-muted text-muted-foreground"
-              : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-          )}
+          className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", statusVariant)}
         >
-          {saving ? "Saving…" : "Saved"}
+          {statusLabel}
         </span>
+        <Button
+          type="button"
+          variant="default"
+          size="sm"
+          onClick={saveResume}
+          disabled={saving || !dirty}
+        >
+          Save
+        </Button>
+        {id ? (
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/templates?resumeId=${id}`}>Change template</Link>
+          </Button>
+        ) : null}
         <span className="ml-auto">
           <PDFDownloadButton data={data} templateId={templateId} />
         </span>
