@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useResumeStore } from "@/lib/resume-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,8 +13,34 @@ import { WorkExperience } from "./sections/WorkExperience";
 import { Education } from "./sections/Education";
 import { Skills } from "./sections/Skills";
 
+const PDFDownloadButton = dynamic(
+  () =>
+    import("@/components/pdf/PDFDownloadButton").then((m) => m.PDFDownloadButton),
+  {
+    ssr: false,
+    loading: () => (
+      <Button variant="outline" size="sm" disabled>
+        Preparing…
+      </Button>
+    ),
+  }
+);
+
+const PDFPreviewPanel = dynamic(
+  () =>
+    import("@/components/pdf/PDFPreviewPanel").then((m) => m.PDFPreviewPanel),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-full min-h-[400px] items-center justify-center rounded-lg border border-dashed text-muted-foreground">
+        Loading preview…
+      </div>
+    ),
+  }
+);
+
 export function EditorLayout() {
-  const { title, updateTitle, saving } = useResumeStore();
+  const { title, updateTitle, saving, data, templateId } = useResumeStore();
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
 
   return (
@@ -35,9 +62,9 @@ export function EditorLayout() {
         >
           {saving ? "Saving…" : "Saved"}
         </span>
-        <Button variant="outline" size="sm" className="ml-auto">
-          Download PDF
-        </Button>
+        <span className="ml-auto">
+          <PDFDownloadButton data={data} templateId={templateId} />
+        </span>
       </header>
 
       <div className="flex flex-1 min-h-0 lg:flex-row flex-col">
@@ -46,8 +73,8 @@ export function EditorLayout() {
           <div className="w-[60%] overflow-y-auto border-r p-6">
             <ResumeForm />
           </div>
-          <div className="w-[40%] overflow-y-auto bg-muted/30 p-6">
-            <PreviewPlaceholder />
+          <div className="w-[40%] overflow-y-auto bg-muted/30 p-6 flex flex-col">
+            <PDFPreviewPanel />
           </div>
         </div>
 
@@ -64,8 +91,8 @@ export function EditorLayout() {
           <TabsContent value="edit" className="flex-1 overflow-y-auto mt-0 p-4">
             <ResumeForm />
           </TabsContent>
-          <TabsContent value="preview" className="flex-1 overflow-y-auto mt-0 p-4 bg-muted/30">
-            <PreviewPlaceholder />
+          <TabsContent value="preview" className="flex-1 overflow-y-auto mt-0 p-4 bg-muted/30 flex flex-col">
+            <PDFPreviewPanel />
           </TabsContent>
         </Tabs>
       </div>
@@ -85,10 +112,3 @@ function ResumeForm() {
   );
 }
 
-function PreviewPlaceholder() {
-  return (
-    <div className="flex h-full min-h-[400px] items-center justify-center rounded-lg border border-dashed text-muted-foreground">
-      PDF preview (Phase 7)
-    </div>
-  );
-}
