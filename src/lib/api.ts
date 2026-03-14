@@ -3,11 +3,11 @@ import type { ResumeData } from "@types/resume";
 export interface Resume {
   id: string;
   userId: string;
-  title: string;
-  templateId: string;
+  title: string | null;
+  templateId: string | null;
   data: ResumeData;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 }
 
 export interface CreateResumeResponse {

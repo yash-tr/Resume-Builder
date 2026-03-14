@@ -4,6 +4,7 @@ import { desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@lib/db";
 import { resumes } from "@lib/db/schema";
+import { ensureProfile } from "@/lib/profile";
 import { defaultResumeData } from "@types/resume";
 
 // GET — list user's resumes
@@ -27,6 +28,14 @@ export async function POST() {
   const { userId } = await auth();
   if (!userId) {
     return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  // Ensure profile exists before creating resume
+  try {
+    await ensureProfile(userId);
+  } catch (error) {
+    console.error("Failed to ensure profile:", error);
+    return new NextResponse("Failed to create profile", { status: 500 });
   }
 
   const id = createId();
